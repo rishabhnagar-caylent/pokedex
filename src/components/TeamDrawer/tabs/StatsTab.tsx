@@ -8,8 +8,8 @@
  */
 
 import type { TeamMember } from '../../../types';
-import { aggregateTeamStats, formatStatName } from '../../../utils/statHelpers';
-import { MAX_BASE_STAT, MAX_TEAM_SIZE, STAT_ORDER } from '../../../utils/constants';
+import { aggregateTeamStats, formatStatName, MAX_BASE_STAT } from '../../../utils/statHelpers';
+import { MAX_TEAM_SIZE, STAT_ORDER } from '../../../utils/constants';
 import styles from './StatsTab.module.css';
 
 interface TeamStatsTabProps {
