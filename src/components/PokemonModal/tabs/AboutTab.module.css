@@ -1,0 +1,40 @@
+.wrapper {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.flavorText {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+}
+
+.dataList {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.6rem 1.5rem;
+  margin: 0;
+}
+
+.dataList dt {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+}
+
+.dataList dd {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  margin: 0;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+}

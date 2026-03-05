@@ -1,0 +1,35 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1rem 2rem;
+  /* Hide scrollbar on desktop but keep scroll functionality */
+  scrollbar-width: none;
+}
+
+.wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* "All" chip — matches the TypeBadge filter style but without a type color */
+.allChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.allChipActive {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
