@@ -1,11 +1,11 @@
 /**
  * MovesTab.tsx — "Moves" tab inside the Pokémon detail modal.
  *
- * Shows a scrollable list of moves the Pokémon can learn.
- * Each row displays: move name, learn method, and level (if via level-up).
+ * Shows the first 10 moves the Pokémon can learn, sorted by:
+ *   1. Level-up moves first, ascending by level
+ *   2. All other learn methods alphabetically
  *
- * The API can return 50+ moves; we list all of them in a scrollable container
- * rather than paginating, since the modal already handles scroll locking.
+ * Each row: move name · learn method badge · level (if level-up)
  */
 
 import type { PokemonMove } from '../../../types';
@@ -15,8 +15,21 @@ interface MovesTabProps {
   moves: PokemonMove[];
 }
 
+const DISPLAY_COUNT = 10;
+
+/** Human-readable learn method labels */
+const METHOD_LABELS: Record<string, string> = {
+  'level-up': 'Level Up',
+  machine:    'TM/HM',
+  tutor:      'Tutor',
+  egg:        'Egg',
+};
+
+function methodLabel(method: string): string {
+  return METHOD_LABELS[method] ?? method.replace(/-/g, ' ');
+}
+
 export function MovesTab({ moves }: MovesTabProps) {
-  // Sort: level-up moves first (by level), then all others alphabetically
   const sorted = [...moves].sort((a, b) => {
     if (a.learnMethod === 'level-up' && b.learnMethod !== 'level-up') return -1;
     if (a.learnMethod !== 'level-up' && b.learnMethod === 'level-up') return 1;
@@ -24,24 +37,36 @@ export function MovesTab({ moves }: MovesTabProps) {
     return a.name.localeCompare(b.name);
   });
 
+  const displayed = sorted.slice(0, DISPLAY_COUNT);
+
   return (
     <div className={styles.wrapper}>
+      {/* Column headers */}
       <div className={styles.header}>
         <span>Move</span>
         <span>Method</span>
-        <span>Level</span>
+        <span>Lv.</span>
       </div>
-      <div className={styles.list}>
-        {sorted.map((move) => (
-          <div key={move.name} className={styles.row}>
-            <span className={styles.moveName}>{move.name.replace(/-/g, ' ')}</span>
-            <span className={styles.method}>{move.learnMethod}</span>
-            <span className={styles.level}>
-              {move.learnMethod === 'level-up' ? move.levelLearnedAt : '—'}
-            </span>
-          </div>
-        ))}
-      </div>
+
+      {displayed.map((move, i) => (
+        <div key={move.name} className={[styles.row, i % 2 === 0 ? styles.rowEven : ''].join(' ')}>
+          <span className={styles.moveName}>
+            {move.name.replace(/-/g, ' ')}
+          </span>
+          <span className={styles.method}>
+            {methodLabel(move.learnMethod)}
+          </span>
+          <span className={styles.level}>
+            {move.learnMethod === 'level-up' && move.levelLearnedAt > 0
+              ? move.levelLearnedAt
+              : '—'}
+          </span>
+        </div>
+      ))}
+
+      <p className={styles.note}>
+        Showing {displayed.length} of {moves.length} moves
+      </p>
     </div>
   );
 }

@@ -1,12 +1,9 @@
 /**
- * PokemonModal.module.css — Pokémon-specific styles inside the modal panel.
- *
- * The backdrop, panel shell, close button, and animations live in
- * components/common/Modal/Modal.module.css.
- * Only content-level styles belong here.
+ * PokemonModal.module.css — Pokémon-specific content styles.
+ * Shell styles (backdrop, panel, close button) → Modal.module.css
+ * Tab bar styles → Tabs.module.css
  */
 
-/* Loading / error states */
 .loadingState {
   display: flex;
   justify-content: center;
@@ -19,7 +16,7 @@
   padding: 2rem 0;
 }
 
-/* ── Header: sprite + name + types ── */
+/* ── Header ── */
 .header {
   display: flex;
   gap: 1.5rem;
@@ -27,8 +24,8 @@
 }
 
 .sprite {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -59,32 +56,4 @@
   gap: 0.4rem;
   flex-wrap: wrap;
   margin-top: 0.25rem;
-}
-
-/* ── Tab bar ── */
-.tabs {
-  display: flex;
-  border-bottom: 2px solid var(--color-border);
-}
-
-.tab {
-  padding: 0.5rem 1.25rem;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.tabActive {
-  color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
-}
-
-.tabContent {
-  min-height: 200px;
 }

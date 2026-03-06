@@ -1,10 +1,17 @@
 /**
- * StatsTab.tsx — "Stats" tab inside the Pokémon detail modal.
+ * StatsTab.tsx — Base stats display for the Pokémon detail modal.
  *
- * Renders each base stat as a labeled bar, showing:
- *   - Stat name (formatted, e.g. "Sp. Atk")
+ * Each stat row shows:
+ *   - Stat label (e.g. "Sp. Atk")
  *   - Numeric value
- *   - Filled progress bar proportional to MAX_BASE_STAT (255)
+ *   - Animated bar proportional to MAX_BASE_STAT (255)
+ *
+ * Bar color reflects the stat value:
+ *   ≥ 90  → green  (strong)
+ *   ≥ 50  → yellow (average)
+ *   < 50  → red    (weak)
+ *
+ * A total base stat row is shown at the bottom.
  */
 
 import type { PokemonStat } from '../../../types';
@@ -16,11 +23,18 @@ interface StatsTabProps {
   stats: PokemonStat[];
 }
 
+function barColor(value: number): string {
+  if (value >= 90) return 'var(--stat-high)';
+  if (value >= 50) return 'var(--stat-mid)';
+  return 'var(--stat-low)';
+}
+
 export function StatsTab({ stats }: StatsTabProps) {
-  // Sort stats in the canonical order defined in constants
   const sorted = STAT_ORDER
     .map((name) => stats.find((s) => s.name === name))
     .filter(Boolean) as PokemonStat[];
+
+  const total = sorted.reduce((sum, s) => sum + s.baseStat, 0);
 
   return (
     <div className={styles.wrapper}>
@@ -31,11 +45,20 @@ export function StatsTab({ stats }: StatsTabProps) {
           <div className={styles.barTrack}>
             <div
               className={styles.barFill}
-              style={{ width: `${statPercent(stat.baseStat)}%` }}
+              style={{
+                width: `${statPercent(stat.baseStat)}%`,
+                backgroundColor: barColor(stat.baseStat),
+              }}
             />
           </div>
         </div>
       ))}
+
+      {/* Total */}
+      <div className={styles.totalRow}>
+        <span className={styles.label}>Total</span>
+        <span className={styles.totalValue}>{total}</span>
+      </div>
     </div>
   );
 }

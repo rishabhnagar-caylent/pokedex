@@ -4,27 +4,21 @@
  * Concerns handled HERE (Pokémon-specific):
  *   - Fetching detail data when a Pokémon id is selected
  *   - Rendering the header (sprite, name, id, types)
- *   - Tab bar (Stats / Moves / About) and tab content
+ *   - Tab bar (Stats / Moves / About) via the reusable Tabs component
  *   - Loading spinner and error state inside the panel
  *
- * Concerns delegated to <Modal> (generic shell):
- *   - Backdrop overlay + click-outside to close
- *   - Escape key to close
- *   - Body scroll lock
- *   - Framer-motion open/close animations
- *   - X close button
+ * Concerns delegated to <Modal>:
+ *   - Backdrop, Escape key, body scroll lock, framer-motion animations, X button
  */
 
-import { useEffect, useState } from 'react';
 import { usePokemonDetail } from '../../hooks/usePokemonDetail';
 import { Modal } from '../common/Modal';
+import { Tabs } from '../common/Tabs';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { PokemonTypeBadge } from '../common/PokemonTypeBadge';
 import { StatsTab } from './tabs/StatsTab';
 import { MovesTab } from './tabs/MovesTab';
 import { AboutTab } from './tabs/AboutTab';
-import type { ModalTab } from '../../utils/constants';
-import { MODAL_TABS } from '../../utils/constants';
 import styles from './PokemonModal.module.css';
 
 interface PokemonModalProps {
@@ -33,40 +27,28 @@ interface PokemonModalProps {
 }
 
 export function PokemonModal({ pokemonId, onClose }: PokemonModalProps) {
-  const [activeTab, setActiveTab] = useState<ModalTab>('stats');
   const { detail, isLoading, error } = usePokemonDetail(pokemonId);
-
-  // Reset to first tab whenever a different Pokémon is opened
-  useEffect(() => {
-    if (pokemonId !== null) setActiveTab('stats');
-  }, [pokemonId]);
 
   return (
     <Modal isOpen={pokemonId !== null} onClose={onClose} maxWidth="480px">
-      {/* Loading state */}
+      {/* Loading */}
       {isLoading && (
         <div className={styles.loadingState}>
           <LoadingSpinner size="lg" />
         </div>
       )}
 
-      {/* Error state */}
+      {/* Error */}
       {error && <p className={styles.error}>{error}</p>}
 
-      {/* Content — only shown when data is ready */}
+      {/* Content */}
       {detail && !isLoading && (
         <>
-          {/* ── Header: sprite + id + name + types ── */}
+          {/* Header: sprite · id · name · types */}
           <div className={styles.header}>
-            <img
-              src={detail.sprite}
-              alt={detail.name}
-              className={styles.sprite}
-            />
+            <img src={detail.sprite} alt={detail.name} className={styles.sprite} />
             <div className={styles.meta}>
-              <span className={styles.id}>
-                #{String(detail.id).padStart(3, '0')}
-              </span>
+              <span className={styles.id}>#{String(detail.id).padStart(3, '0')}</span>
               <h2 className={styles.name}>{detail.name}</h2>
               <div className={styles.types}>
                 {detail.types.map((t) => (
@@ -76,30 +58,28 @@ export function PokemonModal({ pokemonId, onClose }: PokemonModalProps) {
             </div>
           </div>
 
-          {/* ── Tab bar ── */}
-          <div className={styles.tabs} role="tablist">
-            {MODAL_TABS.map((tab) => (
-              <button
-                key={tab}
-                role="tab"
-                aria-selected={activeTab === tab}
-                className={[
-                  styles.tab,
-                  activeTab === tab ? styles.tabActive : '',
-                ].join(' ')}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          {/* ── Tab content ── */}
-          <div className={styles.tabContent}>
-            {activeTab === 'stats' && <StatsTab stats={detail.stats} />}
-            {activeTab === 'moves' && <MovesTab moves={detail.moves} />}
-            {activeTab === 'about' && <AboutTab detail={detail} />}
-          </div>
+          {/* Tabs — reusable component handles bar + active panel */}
+          <Tabs
+            // Reset to Stats tab when a new Pokémon is opened
+            key={pokemonId}
+            tabs={[
+              {
+                id: 'stats',
+                label: 'Stats',
+                content: <StatsTab stats={detail.stats} />,
+              },
+              {
+                id: 'moves',
+                label: 'Moves',
+                content: <MovesTab moves={detail.moves} />,
+              },
+              {
+                id: 'about',
+                label: 'About',
+                content: <AboutTab detail={detail} />,
+              },
+            ]}
+          />
         </>
       )}
     </Modal>

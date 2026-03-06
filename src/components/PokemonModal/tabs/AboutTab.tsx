@@ -1,10 +1,10 @@
 /**
  * AboutTab.tsx — "About" tab inside the Pokémon detail modal.
  *
- * Displays species lore and physical information:
- *   - Flavor text (from pokemon-species endpoint)
+ * Content (from PokeAPI pokemon-species endpoint):
+ *   - Flavor text / species description  ← main focus, shown prominently
  *   - Genus (e.g. "Seed Pokémon")
- *   - Height, Weight
+ *   - Height and Weight
  *   - Abilities
  *   - Base Experience
  */
@@ -20,34 +20,45 @@ interface AboutTabProps {
 export function AboutTab({ detail }: AboutTabProps) {
   return (
     <div className={styles.wrapper}>
-      {/* Flavor text / lore */}
-      {detail.flavorText && (
-        <p className={styles.flavorText}>{detail.flavorText}</p>
+
+      {/* Species description from the species API — most prominent element */}
+      {detail.flavorText ? (
+        <blockquote className={styles.description}>
+          {detail.flavorText}
+        </blockquote>
+      ) : (
+        <p className={styles.noDescription}>No description available.</p>
       )}
 
-      {/* Data table */}
-      <dl className={styles.dataList}>
+      {/* Info grid */}
+      <dl className={styles.grid}>
         {detail.genus && (
-          <>
+          <div className={styles.entry}>
             <dt>Species</dt>
             <dd>{detail.genus}</dd>
-          </>
+          </div>
         )}
 
-        <dt>Height</dt>
-        <dd>{formatHeight(detail.height)}</dd>
+        <div className={styles.entry}>
+          <dt>Height</dt>
+          <dd>{formatHeight(detail.height)}</dd>
+        </div>
 
-        <dt>Weight</dt>
-        <dd>{formatWeight(detail.weight)}</dd>
+        <div className={styles.entry}>
+          <dt>Weight</dt>
+          <dd>{formatWeight(detail.weight)}</dd>
+        </div>
 
-        <dt>Abilities</dt>
-        <dd>{detail.abilities.map((a) => a.replace(/-/g, ' ')).join(', ')}</dd>
+        <div className={styles.entry}>
+          <dt>Abilities</dt>
+          <dd>{detail.abilities.map((a) => a.replace(/-/g, ' ')).join(', ')}</dd>
+        </div>
 
         {detail.baseExperience !== null && (
-          <>
+          <div className={styles.entry}>
             <dt>Base Exp.</dt>
             <dd>{detail.baseExperience}</dd>
-          </>
+          </div>
         )}
       </dl>
     </div>

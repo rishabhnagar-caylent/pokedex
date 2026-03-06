@@ -6,6 +6,8 @@
 
 export { Button } from './Button';
 export { Modal } from './Modal';
+export { Tabs } from './Tabs';
+export type { TabItem } from './Tabs';
 export { TypeBadge } from './TypeBadge';
 export { PokemonTypeBadge } from './PokemonTypeBadge';
 export { LoadingSpinner } from './LoadingSpinner';
