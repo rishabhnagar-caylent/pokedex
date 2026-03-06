@@ -1,36 +1,46 @@
 /**
  * TypeBadge.module.css
- * Uses --type-color CSS custom property injected inline from the component.
+ * Uses --type-color CSS custom property set inline by TypeBadge.tsx.
+ *
+ * Two modes:
+ *   .badge          — static pill on cards / modal header
+ *   .badge.filter   — interactive chip in the filter bar (larger, toggleable)
  */
 
+/* ── Static pill (card / modal) ──────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  padding: 3px 10px;
   border-radius: 9999px;
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: capitalize;
   background-color: var(--type-color);
   color: #fff;
   letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* Filter chip variant — adds hover/active interaction */
+/* ── Filter chip variant ─────────────────────────────────── */
 .filter {
-  cursor: pointer;
-  border: 2px solid transparent;
-  opacity: 0.7;
-  transition: opacity 0.15s, border-color 0.15s;
+  /* Override static styles */
   background-color: transparent;
-  border-color: var(--type-color);
+  border: 2px solid var(--type-color);
   color: var(--type-color);
+  padding: 5px 14px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 
 .filter:hover {
   opacity: 1;
 }
 
+/* Active / selected state — filled with type color */
 .active {
   background-color: var(--type-color);
   color: #fff;

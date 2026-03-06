@@ -17,7 +17,7 @@
  */
 
 import type { PokemonListItem, TeamMember } from '../../types';
-import { TypeBadge } from '../common/TypeBadge';
+import { PokemonTypeBadge } from '../common/PokemonTypeBadge';
 import { Button } from '../common/Button';
 import styles from './PokemonCard.module.css';
 
@@ -63,7 +63,7 @@ export function PokemonCard({
 
         <div className={styles.types}>
           {pokemon.types.map((type) => (
-            <TypeBadge key={type.name} type={type} />
+            <PokemonTypeBadge key={type.name} type={type.name} />
           ))}
         </div>
       </div>

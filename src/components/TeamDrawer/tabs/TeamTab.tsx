@@ -10,7 +10,7 @@
  */
 
 import type { TeamMember } from '../../../types';
-import { TypeBadge } from '../../common/TypeBadge';
+import { PokemonTypeBadge } from '../../common/PokemonTypeBadge';
 import styles from './TeamTab.module.css';
 
 interface TeamTabProps {
@@ -41,7 +41,7 @@ export function TeamTab({ members, onRemove }: TeamTabProps) {
             <span className={styles.name}>{member.name}</span>
             <div className={styles.types}>
               {member.types.map((t) => (
-                <TypeBadge key={t.name} type={t} />
+                <PokemonTypeBadge key={t.name} type={t.name} />
               ))}
             </div>
           </div>

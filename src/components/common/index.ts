@@ -5,6 +5,8 @@
  */
 
 export { Button } from './Button';
+export { Modal } from './Modal';
 export { TypeBadge } from './TypeBadge';
+export { PokemonTypeBadge } from './PokemonTypeBadge';
 export { LoadingSpinner } from './LoadingSpinner';
 export { Navbar } from './Navbar';

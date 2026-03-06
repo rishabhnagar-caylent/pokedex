@@ -57,14 +57,13 @@ export function HomePage() {
       />
 
       <main className={styles.main}>
-        {/* Type filter chips */}
-        {!typesLoading && (
-          <TypeFilter
-            types={types}
-            activeType={activeType}
-            onSelect={setActiveType}
-          />
-        )}
+        {/* Type filter chips — always rendered; shows skeleton while loading */}
+        <TypeFilter
+          types={types}
+          activeType={activeType}
+          onSelect={setActiveType}
+          isLoading={typesLoading}
+        />
 
         {/* Pokémon grid */}
         <PokemonGrid
