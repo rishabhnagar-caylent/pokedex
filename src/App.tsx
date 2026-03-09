@@ -1,28 +1,41 @@
 /**
- * App.tsx — Application root.
+ * App.tsx — Application root and page router.
  *
- * Wraps the entire app in the required context providers:
- *   1. ThemeProvider  — makes theme state + toggleTheme available everywhere.
- *   2. TeamProvider   — makes team state + actions available everywhere.
+ * Two views:
+ *   'landing' — full-screen hero (LandingPage)
+ *   'home'    — main Pokédex grid (HomePage)
  *
- * Providers are defined here rather than in main.tsx to keep main.tsx
- * minimal (just the ReactDOM.createRoot call).
+ * AnimatePresence handles the cross-fade exit animation when the user
+ * clicks "Start Exploring" on the landing page.
  *
- * Currently renders a single page (HomePage). If routing is added later
- * (e.g. React Router), the router would be added here wrapping the pages.
+ * Providers wrap only the HomePage since TeamContext / ThemeContext
+ * are not needed on the landing screen.
  */
 
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
 import { TeamProvider } from './context/TeamContext';
+import { LandingPage } from './pages/LandingPage';
 import { HomePage } from './pages/HomePage';
 
+type View = 'landing' | 'home';
+
 function App() {
+  const [view, setView] = useState<View>('landing');
+
   return (
-    <ThemeProvider>
-      <TeamProvider>
-        <HomePage />
-      </TeamProvider>
-    </ThemeProvider>
+    <AnimatePresence mode="wait">
+      {view === 'landing' ? (
+        <LandingPage key="landing" onStart={() => setView('home')} />
+      ) : (
+        <ThemeProvider key="home">
+          <TeamProvider>
+            <HomePage />
+          </TeamProvider>
+        </ThemeProvider>
+      )}
+    </AnimatePresence>
   );
 }
 
