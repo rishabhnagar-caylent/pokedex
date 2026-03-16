@@ -106,7 +106,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
       >
         {/* Top tags — matches the Figma badge row */}
         <motion.div className={styles.tags} variants={itemVariants}>
-          <span className={styles.tagDate}>2025</span>
+          <span className={styles.tagDate}>2026</span>
           <span className={styles.tagReady}>
             <span className={styles.tagDot} />
             Ready to Explore

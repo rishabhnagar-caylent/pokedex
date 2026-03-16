@@ -5,11 +5,12 @@
  *   'landing' — full-screen hero (LandingPage)
  *   'home'    — main Pokédex grid (HomePage)
  *
- * AnimatePresence handles the cross-fade exit animation when the user
- * clicks "Start Exploring" on the landing page.
+ * Providers are mounted OUTSIDE the view switch so that team and theme
+ * state persist when the user navigates back to the landing page and
+ * returns to the grid — their team is still intact.
  *
- * Providers wrap only the HomePage since TeamContext / ThemeContext
- * are not needed on the landing screen.
+ * On browser refresh: useState resets to 'landing' and all context
+ * state (team, theme) reinitialises to defaults automatically.
  */
 
 import { useState } from 'react';
@@ -25,17 +26,17 @@ function App() {
   const [view, setView] = useState<View>('landing');
 
   return (
-    <AnimatePresence mode="wait">
-      {view === 'landing' ? (
-        <LandingPage key="landing" onStart={() => setView('home')} />
-      ) : (
-        <ThemeProvider key="home">
-          <TeamProvider>
-            <HomePage />
-          </TeamProvider>
-        </ThemeProvider>
-      )}
-    </AnimatePresence>
+    <ThemeProvider>
+      <TeamProvider>
+        <AnimatePresence mode="wait">
+          {view === 'landing' ? (
+            <LandingPage key="landing" onStart={() => setView('home')} />
+          ) : (
+            <HomePage key="home" onBack={() => setView('landing')} />
+          )}
+        </AnimatePresence>
+      </TeamProvider>
+    </ThemeProvider>
   );
 }
 

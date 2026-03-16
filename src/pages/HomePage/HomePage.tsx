@@ -31,14 +31,18 @@ import type { TeamMember } from '../../types';
 import { MAX_TEAM_SIZE } from '../../utils/constants';
 import styles from './HomePage.module.css';
 
-export function HomePage() {
+interface HomePageProps {
+  onBack: () => void;
+}
+
+export function HomePage({ onBack }: HomePageProps) {
   const [selectedPokemonId, setSelectedPokemonId] = useState<number | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Data hooks
   const { pokemon, isLoading, isInitialLoading, error, hasMore, loadMore } = usePokemonList();
   const { types, activeType, setActiveType, filterPokemon, isLoading: typesLoading } = useTypeFilter();
-  const { team, addMember } = useTeam();
+  const { team, addMember, clearTeam } = useTeam();
 
   // Derived data
   const filteredPokemon = filterPokemon(pokemon);
@@ -49,11 +53,18 @@ export function HomePage() {
     addMember(member);
   };
 
+  const handleReset = () => {
+    clearTeam();
+    setActiveType(null);
+  };
+
   return (
     <div className={styles.page}>
       <Navbar
         teamCount={team.length}
         onTeamClick={() => setIsDrawerOpen(true)}
+        onBack={onBack}
+        onReset={handleReset}
       />
 
       <main className={styles.main}>

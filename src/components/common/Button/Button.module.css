@@ -39,6 +39,15 @@
   padding: 0.25rem;
 }
 
+.warning {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.warning:hover {
+  opacity: 0.85;
+}
+
 /* Badge counter pill */
 .badge {
   position: absolute;
